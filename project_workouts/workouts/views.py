@@ -20,6 +20,22 @@ def default_exercises(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+@api_view(['GET'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def get_default_exercises_with_ids(request):
+    # Get the exercise IDs from the request
+    exercise_ids = request.data.get("exercises")
+
+    # Filter the exercises based on the IDs
+    exercises = Exercise.objects.filter(id__in=exercise_ids)
+
+    # Serialize the filtered exercises
+    serializer = ExerciseSerializer(exercises, many=True)
+
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 @api_view(['POST'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])

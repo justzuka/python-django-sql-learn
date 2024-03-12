@@ -34,6 +34,18 @@ Authorization: Token 3f9718daa1bac31e9a8fa9289101c81d50a1019b
 
 ###
 
+GET  http://127.0.0.1:8000/workouts/get-default-exercises-with-ids
+Content-Type: application/json
+Authorization: Token 3f9718daa1bac31e9a8fa9289101c81d50a1019b
+
+{
+    "exercises": [1, 4, 6]
+}
+
+
+
+###
+
 POST  http://127.0.0.1:8000/workouts/create-workout-plan
 Content-Type: application/json
 Authorization: Token 27877389ab9a18086cfbd07f3749bfd4beac8df2
