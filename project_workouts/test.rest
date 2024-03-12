@@ -89,3 +89,11 @@ Authorization: Token 3f9718daa1bac31e9a8fa9289101c81d50a1019b
 {
     "workout_plan": 2
 }
+
+###
+
+GET  http://127.0.0.1:8000/workouts/get_frequency_choices
+Content-Type: application/json
+Authorization: Token 3f9718daa1bac31e9a8fa9289101c81d50a1019b
+
+{}

@@ -8,4 +8,6 @@ urlpatterns = [
     path('create-workout-plan-exercise', views.create_workout_plan_exercise),
     path('get-workout-plan-exercises', views.get_all_workout_plan_exercises),
     path('get-default-exercises-with-ids', views.get_default_exercises_with_ids),
+    path('get_frequency_choices', views.get_frequency_choices),
+
 ]

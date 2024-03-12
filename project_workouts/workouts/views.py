@@ -91,3 +91,16 @@ def get_all_workout_plan_exercises(request):
     serializer = WorkoutPlanExerciseSerializer(workout_plan_exercises, many=True)
 
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def get_frequency_choices(request):
+    # Get the choices from the WorkoutPlan model
+    choices = WorkoutPlan._meta.get_field('frequency').choices
+
+    # Convert the choices to a dictionary
+    choices_dict = {key: value for key, value in choices}
+
+    # Return the choices as a JSON response
+    return Response(choices_dict, status=status.HTTP_200_OK)
