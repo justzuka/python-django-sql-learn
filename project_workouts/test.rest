@@ -18,10 +18,17 @@ Content-Type: application/json
 }
 ###
 
-GET  http://127.0.0.1:8000/test_token
+GET  http://127.0.0.1:8000/myuserauth/test_token
 Content-Type: application/json
 Authorization: Token 3f9718daa1bac31e9a8fa9289101c81d50a1019b
 
 {}
 
+###
+
+GET  http://127.0.0.1:8000/workouts/default-exercises
+Content-Type: application/json
+Authorization: Token 3f9718daa1bac31e9a8fa9289101c81d50a1019b
+
+{}
 
