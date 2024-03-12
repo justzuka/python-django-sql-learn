@@ -92,8 +92,42 @@ Authorization: Token 3f9718daa1bac31e9a8fa9289101c81d50a1019b
 
 ###
 
-GET  http://127.0.0.1:8000/workouts/get_frequency_choices
+GET  http://127.0.0.1:8000/workouts/get-frequency-choices
 Content-Type: application/json
 Authorization: Token 3f9718daa1bac31e9a8fa9289101c81d50a1019b
 
 {}
+###
+
+GET  http://127.0.0.1:8000/workouts/get-goal-type-choices
+Content-Type: application/json
+Authorization: Token 3f9718daa1bac31e9a8fa9289101c81d50a1019b
+
+{}
+
+###
+
+POST  http://127.0.0.1:8000/workouts/create-goal
+Content-Type: application/json
+Authorization: Token 3f9718daa1bac31e9a8fa9289101c81d50a1019b
+
+{
+    "type": "weight",
+    "weight_target": 70.0,
+    "exercise": 1,
+    "target_value": 100
+}
+
+###
+
+PUT  http://127.0.0.1:8000/workouts/update-goal
+Content-Type: application/json
+Authorization: Token 3f9718daa1bac31e9a8fa9289101c81d50a1019b
+
+{
+    "id": 1,
+    "type": "exercise",
+    "weight_target": 75.0,
+    "exercise": 2,
+    "target_value": 150
+}

@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Exercise, WorkoutPlan, WorkoutPlanExercise  # Import the Exercise model
-from .serializers import ExerciseSerializer, WorkoutPlanExerciseSerializer, WorkoutPlanSerializer  # Import the ExerciseSerializer
+from .models import Exercise, Goal, WorkoutPlan, WorkoutPlanExercise  # Import the Exercise model
+from .serializers import ExerciseSerializer, GoalSerializer, WorkoutPlanExerciseSerializer, WorkoutPlanSerializer  # Import the ExerciseSerializer
 
 from rest_framework import status   
 
@@ -104,3 +104,55 @@ def get_frequency_choices(request):
 
     # Return the choices as a JSON response
     return Response(choices_dict, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def get_goal_type_choices(request):
+    # Get the choices from the Goal model
+    choices = Goal._meta.get_field('type').choices
+
+    # Convert the choices to a dictionary
+    choices_dict = {key: value for key, value in choices}
+
+    # Return the choices as a JSON response
+    return Response(choices_dict, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def create_goal(request):
+    data = request.data.copy()
+    data['user'] = request.user.id
+
+    # Create a serializer with the request data
+    serializer = GoalSerializer(data=data)
+
+    # If the serializer is valid, save the goal and return it
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+@api_view(['PUT'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def update_goal(request):
+    goal_id = request.data.get('id')
+    try:
+        goal = Goal.objects.get(id=goal_id, user=request.user)
+    except Goal.DoesNotExist:
+        return Response({'error': 'Goal not found or does not belong to the user'}, status=status.HTTP_404_NOT_FOUND)
+
+    # Create a serializer with the request data
+    serializer = GoalSerializer(goal, data=request.data, partial=True)
+
+    # If the serializer is valid, save the goal and return it
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
