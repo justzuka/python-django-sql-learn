@@ -156,3 +156,33 @@ def update_goal(request):
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+
+@api_view(['GET'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def get_goal(request):
+    goal_id = request.data.get('id')
+    try:
+        # Get the goal that belongs to the authenticated user and has the given ID
+        goal = Goal.objects.get(id=goal_id, user=request.user)
+    except Goal.DoesNotExist:
+        return Response({'error': 'Goal not found or does not belong to the user'}, status=status.HTTP_404_NOT_FOUND)
+
+    # Serialize the goal
+    serializer = GoalSerializer(goal)
+
+    # Return the serialized goal
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def get_all_goals(request):
+    # Get all goals that belong to the authenticated user
+    goals = Goal.objects.filter(user=request.user)
+
+    # Serialize the goals
+    serializer = GoalSerializer(goals, many=True)
+
+    # Return the serialized goals
+    return Response(serializer.data, status=status.HTTP_200_OK)
