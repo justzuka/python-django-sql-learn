@@ -52,3 +52,28 @@ Content-Type: application/json
 Authorization: Token 3f9718daa1bac31e9a8fa9289101c81d50a1019b
 
 {}
+
+###
+
+POST  http://127.0.0.1:8000/workouts/create-workout-plan-exercise
+Content-Type: application/json
+Authorization: Token 3f9718daa1bac31e9a8fa9289101c81d50a1019b
+
+{
+    "workout_plan": 2,
+    "exercise": 1,
+    "repetitions": 5,
+    "sets": 2,
+    "duration": 20,
+    "distance": 0
+}
+
+###
+
+GET  http://127.0.0.1:8000/workouts/get-workout-plan-exercises
+Content-Type: application/json
+Authorization: Token 3f9718daa1bac31e9a8fa9289101c81d50a1019b
+
+{
+    "workout_plan": 2
+}
