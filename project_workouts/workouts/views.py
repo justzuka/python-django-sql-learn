@@ -10,6 +10,9 @@ from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework.authentication import TokenAuthentication,SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+
 
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
@@ -118,10 +121,29 @@ def get_goal_type_choices(request):
     # Return the choices as a JSON response
     return Response(choices_dict, status=status.HTTP_200_OK)
 
+@swagger_auto_schema(method='post', request_body=openapi.Schema(
+    type=openapi.TYPE_OBJECT,
+    properties={
+        'type': openapi.Schema(type=openapi.TYPE_STRING, description='The type of the goal'),
+        'weight_target': openapi.Schema(type=openapi.TYPE_NUMBER, description='The target weight for weight loss/gain goals'),
+        'exercise': openapi.Schema(type=openapi.TYPE_INTEGER, description='The exercise for exercise-specific goals'),
+        'target_value': openapi.Schema(type=openapi.TYPE_INTEGER, description='The target value for the exercise'),
+    },
+    required=['type'],
+),security=[{'Bearer': []}],)
 @api_view(['POST'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def create_goal(request):
+    """
+    Create a new goal for the authenticated user.
+
+    Parameters:
+    - request: The HTTP request. The request data should contain the fields for the goal.
+
+    Returns:
+    - The created goal as a JSON object, or an error message if the request data is not valid.
+    """
     data = request.data.copy()
     data['user'] = request.user.id
 

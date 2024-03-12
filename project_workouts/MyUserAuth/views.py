@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from rest_framework import status   
 from django.shortcuts import get_object_or_404
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 @api_view(['POST'])
 def login(request):
@@ -15,6 +17,15 @@ def login(request):
     serializer = UserSerializer(user)
     return Response({'token': token.key, 'user' : serializer.data})
 
+@swagger_auto_schema(method='post', request_body=openapi.Schema(
+    type=openapi.TYPE_OBJECT,
+    properties={
+        'username': openapi.Schema(type=openapi.TYPE_STRING, description='The username of the user'),
+        'password': openapi.Schema(type=openapi.TYPE_STRING, description='The password of the user'),
+        'email': openapi.Schema(type=openapi.TYPE_STRING, description='The email of the user'),
+    },
+    required=['username', 'password', 'email'],
+))
 @api_view(['POST'])
 def signup(request):
     serializer = UserSerializer(data=request.data)

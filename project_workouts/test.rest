@@ -114,7 +114,7 @@ Authorization: Token 3f9718daa1bac31e9a8fa9289101c81d50a1019b
 {
     "type": "weight",
     "weight_target": 70.0,
-    "exercise": 3,
+    "exercise": 9,
     "target_value": 90
 }
 
