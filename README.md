@@ -12,7 +12,7 @@ After you cloned the repository, you want to create a virtual environment, so yo
 You can do this by running the command
 
 ```
-python -m venv env
+python -m venv venv
 ```
 
 After this, it is necessary to activate the virtual environment.
