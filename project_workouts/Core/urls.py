@@ -9,9 +9,9 @@ from drf_yasg import openapi
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Your API Title",
+        title="Workouts API",
         default_version='v1',
-        description="Description of your API",
+        description="Simple workouts api for creating and managing workout plans, goals and exercises.",
         # Add contact and license information if desired
     ),
     public=True,

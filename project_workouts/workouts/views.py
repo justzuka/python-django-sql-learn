@@ -13,7 +13,11 @@ from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
-
+@swagger_auto_schema(
+    method='get',
+    operation_description='This endpoint allows authenticated users to get a list of all default exercises.',
+    security=[{'Bearer': []}],
+)
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -22,13 +26,28 @@ def default_exercises(request):
     serializer = ExerciseSerializer(exercises, many=True)  # Serialize all exercises
     return Response(serializer.data, status=status.HTTP_200_OK)
 
-
+@swagger_auto_schema(
+    method='get',
+    operation_description='This endpoint allows authenticated users to get a list of default exercises by their IDs.',
+    manual_parameters=[
+        openapi.Parameter(
+            'exercises', 
+            openapi.IN_QUERY, 
+            description='The IDs of the exercises', 
+            type=openapi.TYPE_ARRAY, 
+            items=openapi.Items(type=openapi.TYPE_INTEGER)
+        ),
+    ],
+    security=[{'Bearer': []}],
+)
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def get_default_exercises_with_ids(request):
     # Get the exercise IDs from the request
-    exercise_ids = request.data.get("exercises")
+    exercise_ids_string = request.GET.get("exercises", "")
+    exercise_ids = exercise_ids_string.split(",")
+    exercise_ids = [int(id) for id in exercise_ids]
 
     # Filter the exercises based on the IDs
     exercises = Exercise.objects.filter(id__in=exercise_ids)
@@ -39,6 +58,21 @@ def get_default_exercises_with_ids(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+@swagger_auto_schema(
+    method='post',
+    operation_description='This endpoint allows authenticated users to create a new workout plan.',
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'name': openapi.Schema(type=openapi.TYPE_STRING, description='The name of the workout plan'),
+            'frequency': openapi.Schema(type=openapi.TYPE_INTEGER, description='The frequency of the workout plan'),
+            'goal': openapi.Schema(type=openapi.TYPE_STRING, description='The goal of the workout plan'),
+            'duration': openapi.Schema(type=openapi.TYPE_INTEGER, description='The duration of the workout plan'),
+        },
+        required=['name', 'frequency', 'goal', 'duration'],
+    ),
+    security=[{'Bearer': []}],
+)
 @api_view(['POST'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -50,6 +84,11 @@ def create_workout_plan(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@swagger_auto_schema(
+    method='get',
+    operation_description='This endpoint allows authenticated users to get a list of all their workout plans.',
+    security=[{'Bearer': []}],
+)
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -60,6 +99,24 @@ def get_all_workout_plans(request):
 
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+
+@swagger_auto_schema(
+    method='post',
+    operation_description='This endpoint allows authenticated users to add an exercise to a workout plan.',
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'workout_plan': openapi.Schema(type=openapi.TYPE_INTEGER, description='The ID of the workout plan'),
+            'exercise': openapi.Schema(type=openapi.TYPE_INTEGER, description='The ID of the exercise'),
+            'repetitions': openapi.Schema(type=openapi.TYPE_INTEGER, description='The number of repetitions for the exercise'),
+            'sets': openapi.Schema(type=openapi.TYPE_INTEGER, description='The number of sets for the exercise'),
+            'duration': openapi.Schema(type=openapi.TYPE_INTEGER, description='The duration of the exercise in minutes'),
+            'distance': openapi.Schema(type=openapi.TYPE_INTEGER, description='The distance for the exercise in meters'),
+        },
+        required=['workout_plan', 'exercise', 'repetitions', 'sets', 'duration', 'distance'],
+    ),
+    security=[{'Bearer': []}],
+)
 @api_view(['POST'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -95,6 +152,11 @@ def get_all_workout_plan_exercises(request):
 
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+@swagger_auto_schema(
+    method='get',
+    operation_description='This endpoint allows authenticated users to get the frequency choices for a WorkoutPlan.',
+    security=[{'Bearer': []}],
+)
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -178,12 +240,23 @@ def update_goal(request):
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-
+@swagger_auto_schema(
+    method='get',
+    operation_description='This endpoint allows authenticated users to get a specific goal by its ID.',
+    manual_parameters=[
+        openapi.Parameter(
+            'goal_id', 
+            openapi.IN_PATH, 
+            description='The ID of the goal', 
+            type=openapi.TYPE_INTEGER
+        ),
+    ],
+    security=[{'Bearer': []}],
+)
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def get_goal(request):
-    goal_id = request.data.get('id')
+def get_goal(request, goal_id):
     try:
         # Get the goal that belongs to the authenticated user and has the given ID
         goal = Goal.objects.get(id=goal_id, user=request.user)
@@ -196,6 +269,11 @@ def get_goal(request):
     # Return the serialized goal
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+@swagger_auto_schema(
+    method='get',
+    operation_description='This endpoint allows authenticated users to get a list of all their goals.',
+    security=[{'Bearer': []}],
+)
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])

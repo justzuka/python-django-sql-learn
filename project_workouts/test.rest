@@ -34,13 +34,11 @@ Authorization: Token 3f9718daa1bac31e9a8fa9289101c81d50a1019b
 
 ###
 
-GET  http://127.0.0.1:8000/workouts/get-default-exercises-with-ids
+GET  http://127.0.0.1:8000/workouts/get-default-exercises-with-ids?exercises=1,4,2
 Content-Type: application/json
 Authorization: Token 3f9718daa1bac31e9a8fa9289101c81d50a1019b
 
-{
-    "exercises": [1, 4, 6]
-}
+{}
 
 
 
@@ -134,13 +132,11 @@ Authorization: Token 3f9718daa1bac31e9a8fa9289101c81d50a1019b
 
 ###
 
-GET  http://127.0.0.1:8000/workouts/get-goal
+GET  http://127.0.0.1:8000/workouts/get-goal/1
 Content-Type: application/json
 Authorization: Token 3f9718daa1bac31e9a8fa9289101c81d50a1019b
 
-{
-    "id": 1
-}
+{}
 
 ###
 

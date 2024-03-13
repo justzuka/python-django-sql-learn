@@ -8,6 +8,14 @@ from django.shortcuts import get_object_or_404
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
+@swagger_auto_schema(method='post', request_body=openapi.Schema(
+    type=openapi.TYPE_OBJECT,
+    properties={
+        'username': openapi.Schema(type=openapi.TYPE_STRING, description='The username of the user'),
+        'password': openapi.Schema(type=openapi.TYPE_STRING, description='The password of the user'),
+    },
+    required=['username', 'password'],
+))
 @api_view(['POST'])
 def login(request):
     user = get_object_or_404(User, username=request.data['username'])
