@@ -58,7 +58,7 @@ Now we need to signup or login to use other APIs.
 
 ## Create users and Tokens
 
-Open signup in swagger and click try it out, after execute it should return something like this.
+Find myuserauth/signup endpoint in swagger and click try it out, after execute it should return something like this.
 
 ```
 {
