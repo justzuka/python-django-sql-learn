@@ -136,12 +136,24 @@ def create_workout_plan_exercise(request):
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+@swagger_auto_schema(
+    method='get',
+    operation_description='This endpoint allows authenticated users to get exercises for a specific workout plan by its ID.',
+    manual_parameters=[
+        openapi.Parameter(
+            'workout_plan_id', 
+            openapi.IN_PATH, 
+            description='The ID of the workout plan', 
+            type=openapi.TYPE_INTEGER
+        ),
+    ],
+    security=[{'Bearer': []}],
+)
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def get_all_workout_plan_exercises(request):
-    workout_plan_id = request.data.get('workout_plan')
-
+def get_workout_plan_exercises(request, workout_plan_id):
     # Check if the WorkoutPlan with the given ID belongs to the authenticated user
     if not WorkoutPlan.objects.filter(id=workout_plan_id, user=request.user).exists():
         return Response({'error': 'WorkoutPlan not found or does not belong to the user'}, status=status.HTTP_404_NOT_FOUND)
@@ -151,6 +163,7 @@ def get_all_workout_plan_exercises(request):
     serializer = WorkoutPlanExerciseSerializer(workout_plan_exercises, many=True)
 
     return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 @swagger_auto_schema(
     method='get',
@@ -170,6 +183,11 @@ def get_frequency_choices(request):
     # Return the choices as a JSON response
     return Response(choices_dict, status=status.HTTP_200_OK)
 
+@swagger_auto_schema(
+    method='get',
+    operation_description='This endpoint allows authenticated users to get the goal type choices.',
+    security=[{'Bearer': []}],
+)
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -220,6 +238,21 @@ def create_goal(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
+@swagger_auto_schema(
+    method='put',
+    operation_description='This endpoint allows authenticated users to update a specific goal by its ID.',
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'id': openapi.Schema(type=openapi.TYPE_INTEGER, description='The ID of the goal'),
+            'type': openapi.Schema(type=openapi.TYPE_STRING, description='The type of the goal'),
+            'weight_target': openapi.Schema(type=openapi.TYPE_NUMBER, description='The weight target of the goal'),
+            'exercise': openapi.Schema(type=openapi.TYPE_INTEGER, description='The exercise of the goal'),
+            'target_value': openapi.Schema(type=openapi.TYPE_INTEGER, description='The target value of the goal'),
+        },
+    ),
+    security=[{'Bearer': []}],
+)
 @api_view(['PUT'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])

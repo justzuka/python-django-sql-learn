@@ -80,13 +80,11 @@ Authorization: Token 3f9718daa1bac31e9a8fa9289101c81d50a1019b
 
 ###
 
-GET  http://127.0.0.1:8000/workouts/get-workout-plan-exercises
+GET  http://127.0.0.1:8000/workouts/get-workout-plan-exercises/1
 Content-Type: application/json
 Authorization: Token 3f9718daa1bac31e9a8fa9289101c81d50a1019b
 
-{
-    "workout_plan": 2
-}
+{}
 
 ###
 
