@@ -53,7 +53,7 @@ Run the development server:
 python manage.py runserver
 ```
 
-Access the Swagger documentation at /swagger to interact with the endpoints.
+Access the Swagger documentation at **/swagger** to interact with the endpoints.
 
 Now we need to signup or login to use other APIs.
 
