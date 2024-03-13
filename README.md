@@ -5,6 +5,7 @@
 - Python
 - Django
 - Django REST Framework
+- Sqlite3
 
 ## Installation
 
