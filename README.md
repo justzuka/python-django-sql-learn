@@ -8,6 +8,12 @@
 
 ## Installation
 
+first clone the repo
+
+```
+git clone ...
+```
+
 After you cloned the repository, you want to create a virtual environment, so you have a clean python installation.
 You can do this by running the command
 
