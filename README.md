@@ -24,7 +24,7 @@ venv\Scripts\activate.ps1
 Navigate to the project directory and install requirements:
 
 ```
-cd project_workout
+cd project_workouts
 pip install -r requirements.txt
 ```
 
